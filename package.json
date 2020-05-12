@@ -1,0 +1,56 @@
+{
+  "name": "promptly",
+  "version": "0.1.0",
+  "private": true,
+  "main": "public/electron.js",
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "electron-is-dev": "^1.2.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1"
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "electron": "^8.2.5",
+    "electron-builder": "^22.6.0",
+    "wait-on": "^5.0.0"
+  },
+  "scripts": {
+    "dev": "concurrently \"BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "react-start": "react-scripts start",
+    "build": "react-scripts build",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "homepage": "./",
+  "build": {
+    "appId": "promptly",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
