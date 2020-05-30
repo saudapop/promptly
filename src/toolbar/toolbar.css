@@ -1,0 +1,74 @@
+.list-options-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 2.5px;
+  border-width: 0.5px;
+  border-radius: 30px;
+  border-top-style: solid;
+  border-top-color: var(--transparent);
+}
+
+.icon-container {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.option-icon {
+  color: var(--link);
+  transition: var(--link-transition);
+}
+.option-icon:hover {
+  cursor: pointer;
+  filter: brightness(2);
+}
+.option-icon:active {
+  width: 10px;
+  filter: brightness(0.75);
+}
+
+.expand-icon {
+  height: auto;
+  width: 7px;
+  transform: rotate(45deg);
+  padding: 0px 5px;
+}
+.expand-icon:active {
+  width: 7.5px;
+}
+
+.shrink-icon {
+  height: auto;
+  width: 12px;
+  padding: 0px 5px;
+}
+.shrink-icon:active {
+  width: 13px;
+}
+
+.action-icon {
+  height: auto;
+  width: 8.5px;
+  padding: 0px 10px;
+}
+
+.pin-icon {
+  transform: rotate(45deg);
+}
+
+.pinned {
+  color: rgb(0, 197, 0);
+  transform: rotate(360deg);
+}
+
+.close-icon {
+  color: var(--red);
+  margin-right: 10px;
+}
+
+.option-icon.hidden {
+  height: 0px;
+  width: 0px;
+  transform: rotate(720deg);
+}

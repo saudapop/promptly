@@ -1,32 +1,72 @@
-const electron = require("electron");
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-
+const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
-
 let mainWindow;
 
-function createWindow() {
-  mainWindow = new BrowserWindow({ width: 900, height: 680 });
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../build/index.html")}`
-  );
-  mainWindow.on("closed", () => (mainWindow = null));
-}
+const { menubar } = require("menubar");
 
-app.on("ready", createWindow);
+const mb = menubar({
+  browserWindow: {
+    width: 400,
+    height: 100,
+    webPreferences: { nodeIntegration: true },
+    alwaysOnTop: isDev,
+  },
+  icon: path.join(__dirname, "dock_icons/logoTemplate.png"),
+  preloadWindow: true,
+  index: isDev
+    ? "http://localhost:3000"
+    : `file://${path.join(__dirname, "../build/index.html")}`,
+});
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
+mb.on("ready", () => {
+  mb.showWindow();
+});
+
+mb.on("after-create-window", () => {
+  if (isDev) {
+    mb.window.openDevTools();
   }
 });
 
-app.on("activate", () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
+// function createWindow() {
+//   mainWindow = new BrowserWindow({
+//     width: 400,
+//     height: 100,
+//     webPreferences: { nodeIntegration: true },
+//   });
+//   mainWindow.loadURL(
+//     isDev
+//       ? "http://localhost:3000"
+//       : `file://${path.join(__dirname, "../build/index.html")}`
+//   );
+
+//   mainWindow.on("close", (event) => {
+//     if (process.platform !== "darwin") {
+//       event.preventDefault();
+//       mainWindow.hide();
+//     } else {
+//       mainWindow = null;
+//     }
+//   });
+// }
+
+// app.on("ready", createWindow);
+
+// app.on("window-all-closed", () => {
+//   if (process.platform !== "darwin") {
+//     app.quit();
+//   }
+// });
+
+// app.on("activate", () => {
+//   if (mainWindow === null) {
+//     createWindow();
+//   } else {
+//     mainWindow.show();
+//   }
+// });
+
+// app.on("quit", () => {
+//   app.quit();
+// });

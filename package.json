@@ -8,6 +8,8 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "electron-is-dev": "^1.2.0",
+    "googleapis": "^39.2.0",
+    "menubar": "^8.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
@@ -16,14 +18,16 @@
     "concurrently": "^5.2.0",
     "electron": "^8.2.5",
     "electron-builder": "^22.6.0",
+    "electron-rebuild": "^1.10.1",
     "wait-on": "^5.0.0"
   },
   "scripts": {
-    "dev": "concurrently \"BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "start": "concurrently \"BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
     "react-start": "react-scripts start",
+    "electron-start": "electron .",
     "build": "react-scripts build",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "dist": "npm run build && npx electron-builder",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -35,7 +39,7 @@
       "node_modules/**/*"
     ],
     "directories": {
-      "buildResources": "assets"
+      "buildResources": "build"
     }
   },
   "eslintConfig": {
