@@ -13,7 +13,7 @@ const SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"];
 // const TOKEN_PATH = "token.json";
 // const CREDENTIALS_PATH = "credentials.json";
 
-const TOKEN_PATH = path.join(app.getPath("userData"), "token.json");
+export const TOKEN_PATH = path.join(app.getPath("userData"), "token.json");
 
 const creds = require("./credentials.json");
 
