@@ -12,9 +12,20 @@
 .icon-container {
   display: flex;
   flex: 1;
+  justify-content: center;
+}
+
+.left {
+  padding-left: 20px;
+  margin-right: -25px;
+  justify-content: flex-start;
+}
+
+.right {
   justify-content: flex-end;
 }
 
+/* OPTION ICON */
 .option-icon {
   color: var(--link);
   transition: var(--link-transition);
@@ -24,18 +35,21 @@
   filter: brightness(2);
 }
 .option-icon:active {
-  width: 10px;
+  width: 15px;
   filter: brightness(0.75);
 }
+.option-icon.hidden {
+  height: 0px;
+  width: 0px;
+  transform: rotate(720deg);
+}
 
+/* EXPAND AND SHRINK  */
 .expand-icon {
   height: auto;
   width: 7px;
   transform: rotate(45deg);
   padding: 0px 5px;
-}
-.expand-icon:active {
-  width: 7.5px;
 }
 
 .shrink-icon {
@@ -43,10 +57,8 @@
   width: 12px;
   padding: 0px 5px;
 }
-.shrink-icon:active {
-  width: 13px;
-}
 
+/* RIGHT-SIDE ICONS */
 .action-icon {
   height: auto;
   width: 8.5px;
@@ -67,8 +79,14 @@
   margin-right: 10px;
 }
 
-.option-icon.hidden {
-  height: 0px;
-  width: 0px;
-  transform: rotate(720deg);
+/* SETTINGS  */
+.gear-icon {
+  height: auto;
+  width: 10px;
+}
+.gear-icon:hover {
+  transform: rotate(60deg);
+}
+.gear-icon:active {
+  transform: rotate(120deg);
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { get, cloneDeep } from "lodash";
 
 import { LoadingSpinner } from "./loading-spinner/loading-spinner.js";
@@ -12,6 +12,16 @@ import "./toggle.css";
 
 const { shell } = window.require("electron");
 
+const COLORS = [
+  "default",
+  "purple",
+  "salmon",
+  "orange",
+  "sienna",
+  "green",
+  "teal",
+];
+
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [authUrl, setAuthUrl] = useState("");
@@ -20,10 +30,31 @@ function App() {
   const [error, setError] = useState();
   const [schedule, setSchedule] = useState();
   const [nextMeeting, setNextMeeting] = useState();
+
   const [isWindowExpanded, setIsWindowExpanded] = useState();
   const [isWindowPinned, setIsWindowPinned] = useState(false);
+  const [
+    shouldShowEventsWithVideoLinks,
+    setShouldShowEventsWithVideoLinks,
+  ] = useState(
+    JSON.parse(localStorage.getItem("shouldShowEventsWithoutVideoLinks"))
+  );
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "");
 
   const scheduleListRef = useRef();
+
+  const filteredSchedule = useMemo(
+    () =>
+      schedule &&
+      schedule.filter((evt) => {
+        if (shouldShowEventsWithVideoLinks) {
+          return true;
+        }
+        return !!evt.url;
+      }),
+    [schedule, shouldShowEventsWithVideoLinks]
+  );
 
   async function handleFetchSchedule(client) {
     let newSchedule = await fetchSchedule(client);
@@ -113,48 +144,59 @@ function App() {
     setSchedule(updatedSchedule);
   }
 
+  function handleThemeChange(color) {
+    localStorage.setItem("theme", color);
+    setTheme(color);
+  }
+
   useEffect(() => {
     handleLogin();
   }, []);
 
-  useEffect(() => {
-    if (schedule && schedule.length > 0 && oAuth2Client) {
-      const timer = setInterval(() => {
-        const [meetingOne, meetingTwo] = schedule;
-        const { shouldAutoJoin } = getNextMeetingInfo(meetingOne, meetingTwo);
-        if (!shouldAutoJoin) {
-          refetchSchedule();
-        }
-      }, ONE_MINUTE * 30);
-      return () => clearInterval(timer);
-    }
-  }, [schedule, oAuth2Client]);
+  useEffect(
+    function autoRefreshSchedule() {
+      if (schedule && schedule.length > 0 && oAuth2Client) {
+        const timer = setInterval(() => {
+          const [meetingOne, meetingTwo] = schedule;
+          const { shouldAutoJoin } = getNextMeetingInfo(meetingOne, meetingTwo);
+          if (!shouldAutoJoin) {
+            refetchSchedule();
+          }
+        }, ONE_MINUTE * 30);
+        return () => clearInterval(timer);
+      }
+    },
+    [schedule, oAuth2Client]
+  );
 
-  useEffect(() => {
-    if (schedule && schedule.length > 0) {
-      const timer = setInterval(() => {
-        const [meetingOne, meetingTwo] = schedule;
-        const {
-          event,
-          remainingTime,
-          meetingHasPassed,
-          shouldAutoJoin,
-        } = getNextMeetingInfo(meetingOne, meetingTwo);
+  useEffect(
+    function handleNextMeetingCalculations() {
+      if (filteredSchedule) {
+        const timer = setInterval(() => {
+          const [meetingOne, meetingTwo] = filteredSchedule;
+          const {
+            event,
+            remainingTime,
+            meetingHasPassed,
+            shouldAutoJoin,
+          } = getNextMeetingInfo(meetingOne, meetingTwo);
 
-        if (shouldAutoJoin) {
-          autoJoinMeeting(event);
-        }
-        setNextMeeting(
-          !meetingHasPassed && { title: event.summary, remainingTime }
-        );
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [schedule]);
+          if (shouldAutoJoin) {
+            autoJoinMeeting(event);
+          }
+          setNextMeeting(
+            !meetingHasPassed && { title: event.summary, remainingTime }
+          );
+        }, 1000);
+        return () => clearInterval(timer);
+      }
+    },
+    [filteredSchedule]
+  );
 
   return (
     <div className={`App ${isWindowExpanded ? "expanded" : ""}`}>
-      {<LoadingSpinner className={isLoading ? "" : "hidden"} />}
+      {<LoadingSpinner className={`${theme} ${isLoading ? "" : "hidden"}`} />}
       {error && (
         <div className="error">
           <div>{error.error}</div>
@@ -200,7 +242,14 @@ function App() {
           )}
         </div>
       )}
-      <div className={`schedule-container ${isLoading ? "hidden" : ""}`}>
+      <div
+        className={`
+          schedule-container 
+          ${theme} 
+          ${isLoading ? "hidden" : ""}
+          ${isSettingsMenuOpen ? "blur" : ""}
+        `}
+      >
         <div
           className={`next-meeting-container ${!nextMeeting ? "hidden" : ""}`}
         >
@@ -215,14 +264,16 @@ function App() {
           )}
         </div>
         <div ref={scheduleListRef} className="events-list">
-          {schedule &&
-            schedule.map((event, i) => (
+          {filteredSchedule &&
+            filteredSchedule.map((event, i) => (
               <div className="event-container" key={`${event.url}-${i}`}>
                 <div
                   title={event.url}
-                  className="event-title link"
+                  className={`event-title ${event.url ? "link" : ""}`}
                   onClick={(e) => {
-                    onEventTitleClick(e, event.url);
+                    if (event.url) {
+                      onEventTitleClick(e, event.url);
+                    }
                   }}
                 >
                   {event.summary}
@@ -241,16 +292,12 @@ function App() {
                       <div key={field}>{field.toLocaleUpperCase()}</div>
                     ))}
                 </div>
-                <div>
-                  <label className="switch">
-                    <input
-                      type="checkbox"
-                      checked={!!event.autoJoin}
-                      onChange={() => onEventToggle(event)}
-                    />
-                    <span className="slider round"></span>
-                  </label>
-                </div>
+                <ToggleSlider
+                  className={event.url ? "" : "disabled"}
+                  checked={!!event.autoJoin}
+                  disabled={!event.url}
+                  onChange={() => onEventToggle(event)}
+                />
               </div>
             ))}
         </div>
@@ -262,9 +309,77 @@ function App() {
             setIsWindowPinned={setIsWindowPinned}
             isWindowExpanded={isWindowExpanded}
             setIsWindowExpanded={setIsWindowExpanded}
+            isSettingsMenuOpen={isSettingsMenuOpen}
+            setIsSettingsMenuOpen={setIsSettingsMenuOpen}
           />
         )}
       </div>
+
+      <div className={`settings-menu ${isSettingsMenuOpen ? "" : "hidden"}`}>
+        <div className="settings-container">
+          <div className="theme-list-container">
+            <div className="settings-label">Theme:</div>
+            <div className="theme-container ">
+              {COLORS.map((shade) => (
+                <div
+                  key={shade}
+                  className={`theme-circle ${shade}`}
+                  onClick={() => handleThemeChange(shade)}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="setting-container">
+            <div className="settings-label">Show events w/o video links:</div>
+            <ToggleSlider
+              containerClassName={`toggle-video-links ${theme}`}
+              checked={shouldShowEventsWithVideoLinks}
+              onChange={() => {
+                localStorage.setItem(
+                  "shouldShowEventsWithoutVideoLinks",
+                  !shouldShowEventsWithVideoLinks
+                );
+                setShouldShowEventsWithVideoLinks(
+                  !shouldShowEventsWithVideoLinks
+                );
+              }}
+            />
+          </div>
+          <div className="settings-action-buttons-container">
+            <div
+              className={`link button-link ${theme}`}
+              onClick={() => setIsSettingsMenuOpen(false)}
+            >
+              {"Close"}
+            </div>
+            <div className={`link button-link sign-out-button`}>
+              {"Sign Out"}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ToggleSlider({
+  containerClassName,
+  className,
+  disabled = false,
+  checked,
+  onChange,
+}) {
+  return (
+    <div className={containerClassName}>
+      <label className={`switch ${className}`}>
+        <input
+          type="checkbox"
+          checked={checked}
+          disabled={disabled}
+          onChange={onChange}
+        />
+        <span className="slider round"></span>
+      </label>
     </div>
   );
 }

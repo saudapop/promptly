@@ -37,7 +37,6 @@ export async function fetchSchedule(auth) {
         summary,
         start: { dateTime, date },
         location,
-        ...rest
       }) => {
         const parsedEvent = { summary, start: dateTime || date };
 
@@ -64,6 +63,7 @@ export async function fetchSchedule(auth) {
             return { ...parsedEvent, url };
           }
         }
+        return parsedEvent;
       }
     );
     schedule = schedule.filter((event) => !!event);

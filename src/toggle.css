@@ -13,6 +13,14 @@
   filter: brightness(1.25);
 }
 
+.disabled {
+  filter: brightness(0.35);
+}
+
+.disabled:hover {
+  filter: brightness(0.35);
+}
+
 /* Hide default HTML checkbox */
 .switch input {
   opacity: 0;

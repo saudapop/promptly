@@ -5,6 +5,7 @@
   position: absolute;
   justify-content: center;
   align-items: center;
+  filter: hue-rotate(var(--filter-color));
 }
 
 /* Thank you https://tobiasahlin.com/spinkit/ for this amazing loading spinner! */

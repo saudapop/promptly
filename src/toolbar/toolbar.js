@@ -4,6 +4,7 @@ import { ReactComponent as ExpandIcon } from "./expand-solid.svg";
 import { ReactComponent as RefreshIcon } from "./refresh.svg";
 import { ReactComponent as CloseIcon } from "./times-solid.svg";
 import { ReactComponent as PinIcon } from "./thumbtack-solid.svg";
+import { ReactComponent as SettingsIcon } from "./gear.svg";
 
 import "./toolbar.css";
 
@@ -21,6 +22,8 @@ export function Toolbar({
   setIsWindowPinned,
   isWindowExpanded,
   setIsWindowExpanded,
+  isSettingsMenuOpen,
+  setIsSettingsMenuOpen,
 }) {
   function handleExpandToggle() {
     if (isWindowExpanded) {
@@ -33,12 +36,19 @@ export function Toolbar({
         window.outerHeight + scheduleListRef.current.scrollHeight
       );
     }
-
-    // setIsWindowExpanded(!isWindowExpanded);
   }
 
   return (
     <div className="list-options-container">
+      <div className="icon-container left">
+        <SettingsIcon
+          className={`gear-icon option-icon`}
+          alt={"https://www.flaticon.com/authors/those-icons"}
+          onClick={() => {
+            setIsSettingsMenuOpen(!isSettingsMenuOpen);
+          }}
+        />
+      </div>
       <div className="icon-container">
         <ShrinkIcon
           className={`shrink-icon option-icon ${
@@ -55,7 +65,7 @@ export function Toolbar({
           onClick={handleExpandToggle}
         />
       </div>
-      <div className="icon-container ">
+      <div className="icon-container right">
         <RefreshIcon
           className="action-icon option-icon"
           alt={FONT_AWESOME_LICENSE}
