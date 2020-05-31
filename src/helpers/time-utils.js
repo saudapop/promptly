@@ -62,7 +62,8 @@ export function getNextMeetingInfo(meetingOne, meetingTwo) {
     hours === 0 &&
     minutes < 2 &&
     meetingOne.autoJoin &&
-    !meetingOne.hasAlreadyJoinedMeeting;
+    !meetingOne.hasAlreadyJoinedMeeting &&
+    meetingOne.url;
 
   if (meetingHasPassed && meetingTwo) {
     return getNextMeetingInfo(meetingTwo);
