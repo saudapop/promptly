@@ -23,7 +23,7 @@ function App() {
   const [schedule, setSchedule] = useState();
   const [nextMeeting, setNextMeeting] = useState();
 
-  const [isWindowExpanded, setIsWindowExpanded] = useState();
+  const [isWindowExpanded, setIsWindowExpanded] = useState(false);
   const [isWindowPinned, setIsWindowPinned] = useState(false);
   const [
     shouldShowEventsWithVideoLinks,
@@ -50,10 +50,14 @@ function App() {
 
   async function handleFetchSchedule(client) {
     let newSchedule = await fetchSchedule(client);
-    newSchedule = newSchedule.map((event) => {
-      const isEventAutoJoin = localStorage.getItem(event.summary);
-      return { ...event, autoJoin: JSON.parse(isEventAutoJoin) };
-    });
+    if (newSchedule) {
+      newSchedule = newSchedule.map((event) => {
+        const isEventAutoJoin = localStorage.getItem(event.summary);
+        return { ...event, autoJoin: JSON.parse(isEventAutoJoin) };
+      });
+    } else {
+      newSchedule = [];
+    }
     setSchedule(newSchedule);
   }
 
@@ -163,7 +167,7 @@ function App() {
 
   useEffect(
     function handleNextMeetingCalculations() {
-      if (filteredSchedule) {
+      if (filteredSchedule && filteredSchedule.length) {
         const timer = setInterval(() => {
           const [meetingOne, meetingTwo] = filteredSchedule;
           const {
@@ -208,7 +212,7 @@ function App() {
         className={`
           schedule-container 
           ${theme} 
-          ${isLoading ? "hidden" : ""}
+          ${isLoading || authUrl ? "hidden" : ""}
           ${isSettingsMenuOpen ? "blur" : ""}
         `}
       >
@@ -226,6 +230,11 @@ function App() {
           )}
         </div>
         <div ref={scheduleListRef} className="events-list">
+          {filteredSchedule && !filteredSchedule.length && (
+            <div className="no-events-message">
+              There are no events scheduled
+            </div>
+          )}
           {filteredSchedule &&
             filteredSchedule.map((event, i) => (
               <div className="event-container" key={`${event.url}-${i}`}>

@@ -12,7 +12,6 @@ export function AuthSteps({
   handleSubmitAccessCode,
 }) {
   const [accessCode, setAccessCode] = useState("");
-
   return (
     <div className={`auth-container ${isLoading ? "hidden" : ""}`}>
       <div>{"Step 1:"}</div>
