@@ -1,0 +1,80 @@
+.settings-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  border-color: var(--transparent);
+  transition: 0.5s;
+}
+
+.theme-container,
+.setting-container {
+  display: flex;
+  align-items: flex-end;
+}
+
+.settings-label {
+  font-size: 12px;
+  color: var(--white);
+  padding: 5px 10px;
+}
+
+.theme-circle {
+  width: 20px;
+  height: 20px;
+  border-width: 1px;
+  border-color: var(--transparent);
+  border-style: solid;
+  border-radius: 50px;
+  background-color: var(--link);
+  margin-left: 10px;
+  transition: var(--link-transition);
+  filter: hue-rotate(var(--filter-color));
+}
+
+.theme-circle:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.toggle-video-links {
+  filter: hue-rotate(var(--filter-color));
+}
+
+.settings-action-buttons-container {
+  display: flex;
+  justify-content: center;
+  padding: 0px 5px 5px;
+}
+
+.default {
+  --filter-color: 0deg;
+}
+
+.purple {
+  --filter-color: 75deg;
+}
+
+.salmon {
+  --filter-color: 145deg;
+}
+
+.orange {
+  --filter-color: 180deg;
+}
+
+.sienna {
+  --filter-color: 210deg;
+}
+
+.green {
+  --filter-color: 300deg;
+}
+
+.teal {
+  --filter-color: 330deg;
+}

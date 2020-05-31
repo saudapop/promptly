@@ -1,32 +1,24 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { get, cloneDeep } from "lodash";
 
-import { LoadingSpinner } from "./loading-spinner/loading-spinner.js";
-import { Toolbar } from "./toolbar/toolbar.js";
+import { LoadingSpinner } from "./components/loading-spinner/loading-spinner.js";
+import { Toolbar } from "./components/toolbar/toolbar.js";
+import { ToggleSlider } from "./components/toggle-slider/toggle-slider.js";
+import { SettingsMenu } from "./components/settings-menu/settings-menu.js";
+
 import { login, submitAccessCodeAndGetAccessToken } from "./auth.js";
 import { fetchSchedule } from "./helpers/fetch-schedule";
 import { getNextMeetingInfo, ONE_MINUTE } from "./helpers/time-utils";
 
 import "./App.css";
-import "./toggle.css";
+import { AuthSteps } from "./components/auth-steps/auth-steps.js";
 
 const { shell } = window.require("electron");
-
-const COLORS = [
-  "default",
-  "purple",
-  "salmon",
-  "orange",
-  "sienna",
-  "green",
-  "teal",
-];
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [authUrl, setAuthUrl] = useState("");
   const [oAuth2Client, setOAuth2client] = useState();
-  const [accessCode, setAccessCode] = useState("");
   const [error, setError] = useState();
   const [schedule, setSchedule] = useState();
   const [nextMeeting, setNextMeeting] = useState();
@@ -98,7 +90,7 @@ function App() {
     }
   }
 
-  async function handleSubmitAccessCode() {
+  async function handleSubmitAccessCode(accessCode) {
     setIsLoading(true);
     try {
       await submitAccessCodeAndGetAccessToken(oAuth2Client, accessCode);
@@ -204,43 +196,13 @@ function App() {
         </div>
       )}
       {authUrl && (
-        <div className="auth-container">
-          <div>{"Step 1:"}</div>
-          <div className="auth-step-container">
-            <div
-              className="link button-link"
-              onClick={(e) => {
-                e.preventDefault();
-                shell.openExternal(authUrl);
-              }}
-            >
-              {"Get an access code"}
-            </div>
-          </div>
-
-          {oAuth2Client && (
-            <div style={{ display: "flex" }}>
-              <div>{"Step 2:"}</div>
-              <div className="auth-step-container">
-                <input
-                  className="access-code-input"
-                  placeholder="paste code here"
-                  value={accessCode}
-                  onChange={(e) => {
-                    setAccessCode(e.target.value);
-                    setError(null);
-                  }}
-                />
-                <div
-                  className="link button-link"
-                  onClick={handleSubmitAccessCode}
-                >
-                  {"Submit access code"}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+        <AuthSteps
+          isLoading={isLoading}
+          authUrl={authUrl}
+          oAuth2Client={oAuth2Client}
+          setError={setError}
+          handleSubmitAccessCode={handleSubmitAccessCode}
+        />
       )}
       <div
         className={`
@@ -314,72 +276,14 @@ function App() {
           />
         )}
       </div>
-
-      <div className={`settings-menu ${isSettingsMenuOpen ? "" : "hidden"}`}>
-        <div className="settings-container">
-          <div className="theme-list-container">
-            <div className="settings-label">Theme:</div>
-            <div className="theme-container ">
-              {COLORS.map((shade) => (
-                <div
-                  key={shade}
-                  className={`theme-circle ${shade}`}
-                  onClick={() => handleThemeChange(shade)}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="setting-container">
-            <div className="settings-label">Show events w/o video links:</div>
-            <ToggleSlider
-              containerClassName={`toggle-video-links ${theme}`}
-              checked={shouldShowEventsWithVideoLinks}
-              onChange={() => {
-                localStorage.setItem(
-                  "shouldShowEventsWithoutVideoLinks",
-                  !shouldShowEventsWithVideoLinks
-                );
-                setShouldShowEventsWithVideoLinks(
-                  !shouldShowEventsWithVideoLinks
-                );
-              }}
-            />
-          </div>
-          <div className="settings-action-buttons-container">
-            <div
-              className={`link button-link ${theme}`}
-              onClick={() => setIsSettingsMenuOpen(false)}
-            >
-              {"Close"}
-            </div>
-            <div className={`link button-link sign-out-button`}>
-              {"Sign Out"}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ToggleSlider({
-  containerClassName,
-  className,
-  disabled = false,
-  checked,
-  onChange,
-}) {
-  return (
-    <div className={containerClassName}>
-      <label className={`switch ${className}`}>
-        <input
-          type="checkbox"
-          checked={checked}
-          disabled={disabled}
-          onChange={onChange}
-        />
-        <span className="slider round"></span>
-      </label>
+      <SettingsMenu
+        isSettingsMenuOpen={isSettingsMenuOpen}
+        setIsSettingsMenuOpen={setIsSettingsMenuOpen}
+        handleThemeChange={handleThemeChange}
+        theme={theme}
+        shouldShowEventsWithVideoLinks={shouldShowEventsWithVideoLinks}
+        setShouldShowEventsWithVideoLinks={setShouldShowEventsWithVideoLinks}
+      />
     </div>
   );
 }
