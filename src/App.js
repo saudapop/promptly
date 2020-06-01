@@ -4,7 +4,6 @@ import { get, cloneDeep } from "lodash";
 import { Event } from "./components/event/event.js";
 import { LoadingSpinner } from "./components/loading-spinner/loading-spinner.js";
 import { Toolbar } from "./components/toolbar/toolbar.js";
-import { ToggleSlider } from "./components/toggle-slider/toggle-slider.js";
 import { SettingsMenu } from "./components/settings-menu/settings-menu.js";
 
 import { login, submitAccessCodeAndGetAccessToken } from "./auth.js";
