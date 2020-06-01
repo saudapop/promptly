@@ -67,7 +67,8 @@ export function SettingsMenu({
                   {COLORS.map((shade) => (
                     <div
                       key={shade}
-                      className={`theme-circle ${shade}`}
+                      className={`theme-circle ${shade}
+                        ${theme === shade ? "active" : ""}`}
                       onClick={() => handleThemeChange(shade)}
                     />
                   ))}
