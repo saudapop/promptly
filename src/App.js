@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { get, cloneDeep } from "lodash";
 
+import { Event } from "./components/event/event.js";
 import { LoadingSpinner } from "./components/loading-spinner/loading-spinner.js";
 import { Toolbar } from "./components/toolbar/toolbar.js";
 import { ToggleSlider } from "./components/toggle-slider/toggle-slider.js";
@@ -14,6 +15,7 @@ import "./App.css";
 import { AuthSteps } from "./components/auth-steps/auth-steps.js";
 
 const { shell } = window.require("electron");
+const DEFAULT_THEME = "default";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +34,9 @@ function App() {
     JSON.parse(localStorage.getItem("shouldShowEventsWithoutVideoLinks"))
   );
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "");
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || DEFAULT_THEME
+  );
 
   const scheduleListRef = useRef();
 
@@ -237,39 +241,12 @@ function App() {
           )}
           {filteredSchedule &&
             filteredSchedule.map((event, i) => (
-              <div className="event-container" key={`${event.url}-${i}`}>
-                <div
-                  title={event.url}
-                  className={`event-title ${event.url ? "link" : ""}`}
-                  onClick={(e) => {
-                    if (event.url) {
-                      onEventTitleClick(e, event.url);
-                    }
-                  }}
-                >
-                  {event.summary}
-                </div>
-                <div className="event-time">
-                  {new Date(event.start)
-                    .toLocaleString([], {
-                      weekday: "short",
-                      month: "numeric",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
-                    .split(",")
-                    .map((field) => (
-                      <div key={field}>{field.toLocaleUpperCase()}</div>
-                    ))}
-                </div>
-                <ToggleSlider
-                  className={event.url ? "" : "disabled"}
-                  checked={!!event.autoJoin}
-                  disabled={!event.url}
-                  onChange={() => onEventToggle(event)}
-                />
-              </div>
+              <Event
+                event={event}
+                index={i}
+                onEventTitleClick={onEventTitleClick}
+                onEventToggle={onEventToggle}
+              />
             ))}
         </div>
         {schedule && (
