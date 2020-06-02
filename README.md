@@ -12,10 +12,10 @@ Promptly is a desktop app that lives in your menubar and automatically joins any
 
 <div align="center">
 
-|                                            MacOS                                             |                                               Linux                                                |                                            Windows                                             |
-| :------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------: |
-|   [.dmg](https://github.com/saudapop/promptly/releases/download/v0.1.0/promptly-0.1.0.dmg)   | [.AppImage](https://github.com/saudapop/promptly/releases/download/v0.1.0/Promptly-0.1.0.AppImage) | [.exe](https://github.com/saudapop/promptly/releases/download/v0.1.0/promptly.Setup.0.1.0.exe) |
-| [.zip](https://github.com/saudapop/promptly/releases/download/v0.1.0/promptly-0.1.0-mac.zip) |                                                                                                    |
+|                                          MacOS                                           |                                               Linux                                                |                                            Windows                                             |
+| :--------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------: |
+| [.dmg](https://github.com/saudapop/promptly/releases/download/v0.1.0/promptly-0.1.0.dmg) | [.AppImage](https://github.com/saudapop/promptly/releases/download/v0.1.0/Promptly-0.1.0.AppImage) | [.exe](https://github.com/saudapop/promptly/releases/download/v0.1.0/promptly.Setup.0.1.0.exe) |
+
 </div>
 
 ***
