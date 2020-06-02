@@ -12,6 +12,7 @@ const { remote } = window.require("electron");
 
 const WINDOW_HEIGHT = 400;
 const WINDOW_WIDTH = 100;
+const GUTTER_HEIGHT = 50;
 
 const FONT_AWESOME_LICENSE = "https://fontawesome.com/license";
 
@@ -33,7 +34,7 @@ export function Toolbar({
       setTimeout(() => setIsWindowExpanded(!isWindowExpanded), 0);
       window.resizeTo(
         400,
-        window.outerHeight + scheduleListRef.current.scrollHeight
+        scheduleListRef.current.scrollHeight + GUTTER_HEIGHT
       );
     }
   }
@@ -81,12 +82,18 @@ export function Toolbar({
             setIsWindowPinned(!isWindowPinned);
           }}
         />
-        <CloseIcon
-          className="action-icon option-icon close-icon"
-          alt={FONT_AWESOME_LICENSE}
-          onClick={() => remote.getCurrentWindow().close()}
-        />
+        <QuitButton />
       </div>
     </div>
+  );
+}
+
+export function QuitButton() {
+  return (
+    <CloseIcon
+      className="action-icon option-icon close-icon"
+      alt={FONT_AWESOME_LICENSE}
+      onClick={() => remote.getCurrentWindow().close()}
+    />
   );
 }
