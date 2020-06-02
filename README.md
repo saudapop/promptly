@@ -1,25 +1,28 @@
-<center>
+<h1 align="center"> Promptly </h1>
 
-# Promptly
+<p align="center">
+<img  width="125"   src="https://raw.githubusercontent.com/saudapop/promptly/master/public/icon.png">
+</p>
 
-
-<img  width="125"  src="https://raw.githubusercontent.com/saudapop/promptly/master/public/icon.png">
-
-
+<p align="center">
 Promptly is a desktop app that lives in your menubar and automatically joins any upcoming meeting with a video conference link on your Google calendar 2 minutes before the meeting starts if you've toggled auto-join on for that particular meeting via Promptly's UI.
+</p>
 
 
 
+<div align="center">
 
 |                                            MacOS                                             |                                               Linux                                                |                                            Windows                                             |
 | :------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------: |
 |   [.dmg](https://github.com/saudapop/promptly/releases/download/v0.1.0/promptly-0.1.0.dmg)   | [.AppImage](https://github.com/saudapop/promptly/releases/download/v0.1.0/Promptly-0.1.0.AppImage) | [.exe](https://github.com/saudapop/promptly/releases/download/v0.1.0/promptly.Setup.0.1.0.exe) |
 | [.zip](https://github.com/saudapop/promptly/releases/download/v0.1.0/promptly-0.1.0-mac.zip) |                                                                                                    |
+</div>
+- [MacOS](#macos)
+- [Windows](#windows)
+- [Linux](#linux)
+- [Google Authentication](#google-authentication)
 
-</center>
-
-
-# MacOS
+## MacOS
 
 Since Promptly is not notarized by Apple (yet), you should expect to see this screen or something similar when you try to open the app:
 
@@ -37,7 +40,14 @@ To get around this
 <img width="427" alt="Screen Shot 2020-06-02 at 11 16 04 AM" src="https://user-images.githubusercontent.com/45129081/83544633-36ece580-a4cc-11ea-8cbc-30c194fc8d07.png">
 
 ***
-# Google Authentication 
+
+## Windows
+TODO
+
+## Linux
+TODO
+
+## Google Authentication 
 
 Since Promptly is not verified by Google (yet). after selecting your google account you should expect to see this screen 
 
