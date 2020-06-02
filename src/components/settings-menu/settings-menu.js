@@ -26,7 +26,7 @@ export function SettingsMenu({
   function currentEventsListHeight() {
     return (
       Array.from(scheduleListRef.current.children).reduce(
-        (acc, curr) => acc + Number(curr.scrollHeight),
+        (totalHeight, child) => totalHeight + Number(child.scrollHeight),
         0
       ) + 50
     );
