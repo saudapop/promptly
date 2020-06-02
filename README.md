@@ -3,7 +3,7 @@
 # Promptly
 
 
-<img  width="125"  src="./build/icon.png">
+<img  width="125"  src="https://raw.githubusercontent.com/saudapop/promptly/master/public/icon.png">
 
 
 Promptly is a desktop app that lives in your menubar and automatically joins any upcoming meeting with a video conference link on your Google calendar 2 minutes before the meeting starts if you've toggled auto-join on for that particular meeting via Promptly's UI.
