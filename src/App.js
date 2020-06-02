@@ -268,6 +268,9 @@ function App() {
         theme={theme}
         shouldShowEventsWithVideoLinks={shouldShowEventsWithVideoLinks}
         setShouldShowEventsWithVideoLinks={setShouldShowEventsWithVideoLinks}
+        setIsWindowExpanded={setIsWindowExpanded}
+        scheduleListRef={scheduleListRef}
+        isWindowExpanded={isWindowExpanded}
       />
     </div>
   );

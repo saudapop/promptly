@@ -17,8 +17,20 @@ export function SettingsMenu({
   theme,
   shouldShowEventsWithVideoLinks,
   setShouldShowEventsWithVideoLinks,
+  scheduleListRef,
+  setIsWindowExpanded,
+  isWindowExpanded,
 }) {
   const [isConfirmSignOutVisible, setIsConfirmSignOutVisible] = useState(false);
+
+  function currentEventsListHeight() {
+    return (
+      Array.from(scheduleListRef.current.children).reduce(
+        (acc, curr) => acc + Number(curr.scrollHeight),
+        0
+      ) + 50
+    );
+  }
 
   function handleToggle() {
     localStorage.setItem(
@@ -26,6 +38,11 @@ export function SettingsMenu({
       !shouldShowEventsWithVideoLinks
     );
     setShouldShowEventsWithVideoLinks(!shouldShowEventsWithVideoLinks);
+
+    if (isWindowExpanded) {
+      setTimeout(() => setIsWindowExpanded(true));
+      setTimeout(() => window.resizeTo(400, currentEventsListHeight()), 50);
+    }
   }
 
   function confirmSignOut() {
