@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ToggleSlider } from "../toggle-slider/toggle-slider.js";
 
 import { TOKEN_PATH } from "../../auth.js";
@@ -6,6 +6,7 @@ import { TOKEN_PATH } from "../../auth.js";
 import "./settings-menu.css";
 
 const fs = window.require("fs");
+const { remote } = window.require("electron");
 
 const COLORS = ["default", "purple", "pink", "orange", "gold", "green", "teal"];
 
@@ -62,7 +63,10 @@ export function SettingsMenu({
           ) : (
             <>
               <div className="theme-list-container">
-                <div className="settings-label">Theme:</div>
+                <div className="version-label">
+                  {"version: " + remote.app.getVersion()}
+                </div>
+                <div className="settings-label header">Theme:</div>
                 <div className="theme-container ">
                   {COLORS.map((shade) => (
                     <div

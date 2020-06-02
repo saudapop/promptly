@@ -24,6 +24,14 @@
   text-shadow: 2px 2px 1px black;
 }
 
+.version-label {
+  font-size: 8px;
+  position: absolute;
+  bottom: 3px;
+  left: 6px;
+  text-shadow: 2px 2px 1px black;
+}
+
 .theme-circle {
   width: 20px;
   height: 20px;

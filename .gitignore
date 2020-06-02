@@ -27,3 +27,5 @@ token.json
 
 dist/
 dump/
+
+.env
