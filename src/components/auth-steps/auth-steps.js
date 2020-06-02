@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { QuitButton } from "../toolbar/toolbar.js";
 import "./auth-steps.css";
 
 const { shell } = window.require("electron");
@@ -49,6 +49,9 @@ export function AuthSteps({
           </div>
         </div>
       )}
+      <div className="auth-screen-quit-button-container">
+        <QuitButton />
+      </div>
     </div>
   );
 }

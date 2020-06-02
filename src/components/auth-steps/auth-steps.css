@@ -14,3 +14,9 @@
   border: 1px solid var(--transparent);
   border-radius: 5px;
 }
+
+.auth-screen-quit-button-container {
+  position: absolute;
+  bottom: 16px;
+  right: -14px;
+}
