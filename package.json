@@ -1,13 +1,16 @@
 {
-  "name": "promptly",
+  "name": "Promptly",
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
+  "author": "Saud Ahmed <xsaudahmed@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "electron-is-dev": "^1.2.0",
+    "electron-updater": "^4.3.1",
     "googleapis": "^39.2.0",
     "menubar": "^8.0.2",
     "react": "^16.13.1",
@@ -16,9 +19,10 @@
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
+    "dotenv": "^8.2.0",
     "electron": "^8.2.5",
     "electron-builder": "^22.6.0",
-    "electron-rebuild": "^1.10.1",
+    "electron-notarize": "^0.3.0",
     "wait-on": "^5.0.0"
   },
   "scripts": {
@@ -28,18 +32,39 @@
     "build": "react-scripts build",
     "pack": "electron-builder --dir",
     "dist": "npm run build && npx electron-builder",
+    "publish": "electron-builder -p always",
+    "postinstall": "electron-builder install-app-deps",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "homepage": "./",
   "build": {
-    "appId": "promptly",
+    "appId": "com.promptly.app",
+    "productName": "Promptly",
+    "afterSign": "./notarize.js",
     "files": [
-      "build/**/*",
-      "node_modules/**/*"
+      "build/**/*"
     ],
     "directories": {
       "buildResources": "build"
+    },
+    "mac": {
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "dmg": {
+      "sign": false
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ]
     }
   },
   "eslintConfig": {

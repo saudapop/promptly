@@ -4,6 +4,7 @@ const isDev = require("electron-is-dev");
 let mainWindow;
 
 const { menubar } = require("menubar");
+const { autoUpdater } = require("electron-updater");
 
 const mb = menubar({
   browserWindow: {
@@ -22,6 +23,8 @@ const mb = menubar({
 mb.on("ready", () => {
   mb.showWindow();
 });
+
+autoUpdater.checkForUpdatesAndNotify();
 
 mb.on("after-create-window", () => {
   if (isDev) {
