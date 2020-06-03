@@ -5,14 +5,14 @@
   --transparent: rgb(270, 270, 270, 0.3);
   --less-transparent: rgb(270, 270, 270, 0.1);
   --link-transition: cubic-bezier(0.19, 1, 0.22, 1) 1s;
-
+  --black: #272821;
   --blur: 0;
   --filter-color: 0;
   --button-hover: 1;
 }
 
 body {
-  background-color: #272821;
+  background-color: var(--black);
 }
 
 #root {
@@ -23,6 +23,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
   height: 100px;
   color: var(--white);
   filter: blur(var(--blur));
@@ -53,6 +54,7 @@ body {
   color: var(--link);
   transition: var(--link-transition);
 }
+
 .link:hover {
   cursor: pointer;
   --button-hover: 1.2;
@@ -111,6 +113,7 @@ body {
   opacity: 1;
   transition: 0.5s;
 }
+
 .next-meeting-container.hidden {
   opacity: 0;
   transform: scaleX(0);

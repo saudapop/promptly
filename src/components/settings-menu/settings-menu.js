@@ -20,6 +20,7 @@ export function SettingsMenu({
   scheduleListRef,
   setIsWindowExpanded,
   isWindowExpanded,
+  adjustWindowPosition,
 }) {
   const [isConfirmSignOutVisible, setIsConfirmSignOutVisible] = useState(false);
 
@@ -41,7 +42,10 @@ export function SettingsMenu({
 
     if (isWindowExpanded) {
       setTimeout(() => setIsWindowExpanded(true));
-      setTimeout(() => window.resizeTo(400, currentEventsListHeight()), 50);
+      setTimeout(() => {
+        window.resizeTo(400, currentEventsListHeight());
+        adjustWindowPosition();
+      }, 50);
     }
   }
 
