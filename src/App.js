@@ -206,7 +206,7 @@ function App() {
 
   return (
     <div className={`App ${isWindowExpanded ? "expanded" : ""}`}>
-      {<LoadingSpinner className={`${theme} ${isLoading ? "" : "hidden"}`} />}
+      <LoadingSpinner className={`${theme} ${isLoading ? "" : "hidden"}`} />
       {error && (
         <div className="error">
           <div>{error.error}</div>
