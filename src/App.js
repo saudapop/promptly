@@ -160,7 +160,10 @@ function App() {
 
   useEffect(() => {
     handleLogin();
-    setInitialCoordinates({ x: window.screenX, y: window.screenY });
+    setTimeout(
+      () => setInitialCoordinates({ x: window.screenX, y: window.screenY }),
+      1000
+    );
   }, []);
 
   useEffect(
