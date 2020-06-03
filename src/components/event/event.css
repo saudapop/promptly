@@ -6,10 +6,6 @@
     margin-right: 5px
 }
 
-
-/* Demonstrate a "mostly customized" scrollbar
- * (won't be visible otherwise if width/height is specified) */
-
 .events-list::-webkit-scrollbar {
     width: 6px;
     padding-right: 10px;
@@ -19,9 +15,6 @@
     border-radius: 20px;
     background-color: var(--less-transparent);
 }
-
-
-/* Add a thumb */
 
 .events-list::-webkit-scrollbar-thumb {
     background: var(--link);
