@@ -14,7 +14,7 @@ Promptly is a desktop app that lives in your menubar and automatically joins any
 
 |                                          MacOS                                           |                                               Linux                                                |                                            Windows                                             |
 | :--------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------: |
-| [.dmg](https://github.com/saudapop/promptly/releases/download/v0.1.0/promptly-0.1.0.dmg) | [.AppImage](https://github.com/saudapop/promptly/releases/download/v0.1.0/Promptly-0.1.0.AppImage) | [.exe](https://github.com/saudapop/promptly/releases/download/v0.1.0/promptly.Setup.0.1.0.exe) |
+| [.dmg](https://github.com/saudapop/promptly/releases/download/v0.1.1/promptly-0.1.1.dmg) | [.AppImage](https://github.com/saudapop/promptly/releases/download/v0.1.1/Promptly-0.1.1.AppImage) | [.exe](https://github.com/saudapop/promptly/releases/download/v0.1.1/promptly.Setup.0.1.1.exe) |
 
 </div>
 
