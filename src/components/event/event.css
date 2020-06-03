@@ -1,46 +1,74 @@
 .events-list {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-x: hidden;
+    margin-right: 5px
+}
+
+
+/* Demonstrate a "mostly customized" scrollbar
+ * (won't be visible otherwise if width/height is specified) */
+
+.events-list::-webkit-scrollbar {
+    width: 6px;
+    padding-right: 10px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+    border-radius: 20px;
+    background-color: var(--less-transparent);
+}
+
+
+/* Add a thumb */
+
+.events-list::-webkit-scrollbar-thumb {
+    background: var(--link);
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+    border-radius: 20px;
 }
 
 .event-container {
-  font-size: 12px;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: baseline;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: baseline;
 }
+
 .event-container:hover {
-  background-color: var(--less-transparent);
+    background-color: var(--less-transparent);
 }
 
 .event-title {
-  width: 190px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  filter: brightness(1.2);
+    width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    filter: brightness(1.2);
 }
+
 .event-title:hover {
-  filter: brightness(2);
+    filter: brightness(2);
 }
 
 .event-time {
-  font-family: "Courier New", Courier, monospace;
-  font-size: 11px;
-  font-weight: bolder;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 11px;
+    font-weight: bolder;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
 }
 
-.event-time > * {
-  width: 20px;
-  padding-left: 8px;
+.event-time>* {
+    width: 20px;
+    padding-left: 8px;
 }
 
-.event-time > *:last-child {
-  padding-left: 15px;
-  width: 55px;
+.event-time>*:last-child {
+    padding-left: 15px;
+    width: 55px;
 }

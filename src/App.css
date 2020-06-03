@@ -1,138 +1,142 @@
 :root {
-  --link: #00a4d1;
-  --red: rgb(255, 97, 97);
-  --white: rgb(230, 230, 230);
-  --transparent: rgb(270, 270, 270, 0.3);
-  --less-transparent: rgb(270, 270, 270, 0.1);
-  --link-transition: cubic-bezier(0.19, 1, 0.22, 1) 1s;
-
-  --blur: 0;
-  --filter-color: 0;
-  --button-hover: 1;
+    --link: #00a4d1;
+    --red: rgb(255, 97, 97);
+    --white: rgb(230, 230, 230);
+    --transparent: rgb(270, 270, 270, 0.3);
+    --less-transparent: rgb(270, 270, 270, 0.1);
+    --link-transition: cubic-bezier(0.19, 1, 0.22, 1) 1s;
+    --black: #272821;
+    --blur: 0;
+    --filter-color: 0;
+    --button-hover: 1;
 }
 
 body {
-  background-color: #272821;
+    background-color: var(--black)
 }
 
 #root {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .App {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100px;
-  color: var(--white);
-  filter: blur(var(--blur));
-  transition: cubic-bezier(0.23, 1, 0.32, 1) 0.5s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    height: 100px;
+    color: var(--white);
+    filter: blur(var(--blur));
+    transition: cubic-bezier(0.23, 1, 0.32, 1) 0.5s;
 }
 
 .expanded {
-  height: 100vh;
+    height: 100vh;
 }
 
 .error {
-  display: flex;
-  align-self: flex-start;
-  flex-shrink: 0.5;
-  flex-direction: column;
-  font-size: 10px;
-  font-weight: bold;
-  padding-left: 10px;
-  color: var(--red);
-  width: 93%;
-  height: 100%;
-  border: 1px solid var(--transparent);
-  border-radius: 5px;
-  overflow: scroll;
+    display: flex;
+    align-self: flex-start;
+    flex-shrink: 0.5;
+    flex-direction: column;
+    font-size: 10px;
+    font-weight: bold;
+    padding-left: 10px;
+    color: var(--red);
+    width: 93%;
+    height: 100%;
+    border: 1px solid var(--transparent);
+    border-radius: 5px;
+    overflow: scroll;
 }
 
 .link {
-  color: var(--link);
-  transition: var(--link-transition);
+    color: var(--link);
+    transition: var(--link-transition);
 }
+
 .link:hover {
-  cursor: pointer;
-  --button-hover: 1.2;
+    cursor: pointer;
+    --button-hover: 1.2;
 }
 
 .link:active {
-  transform: scale(0.95);
+    transform: scale(0.95);
 }
 
 .button-link {
-  min-width: 40px;
-  display: flex;
-  justify-content: center;
-  padding: 2px;
-  font-size: 12px;
-  background-color: var(--link);
-  color: var(--white);
-  border: 1px solid var(--transparent);
-  border-radius: 5px;
-  filter: hue-rotate(var(--filter-color)) brightness(var(--button-hover));
+    min-width: 40px;
+    display: flex;
+    justify-content: center;
+    padding: 2px;
+    font-size: 12px;
+    background-color: var(--link);
+    color: var(--white);
+    border: 1px solid var(--transparent);
+    border-radius: 5px;
+    filter: hue-rotate(var(--filter-color)) brightness(var(--button-hover));
 }
 
 .button-link:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .hidden {
-  visibility: hidden;
-  opacity: 0;
-  padding: 0px;
-  transition: 1s;
+    visibility: hidden;
+    opacity: 0;
+    padding: 0px;
+    transition: 1s;
 }
 
 .schedule-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  transition: 0.5s;
-  filter: hue-rotate(var(--filter-color)) blur(var(--blur));
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    transition: 0.5s;
+    filter: hue-rotate(var(--filter-color)) blur(var(--blur));
 }
 
 .blur {
-  --blur: 2px;
+    --blur: 2px;
 }
+
 
 /* NEXT MEETING HEADER */
 
 .next-meeting-container,
 .no-events-message {
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  padding: 5px;
-  height: 20px;
-  opacity: 1;
-  transition: 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    padding: 5px;
+    height: 20px;
+    opacity: 1;
+    transition: 0.5s;
 }
+
 .next-meeting-container.hidden {
-  opacity: 0;
-  transform: scaleX(0);
+    opacity: 0;
+    transform: scaleX(0);
 }
 
 .countdown-clock {
-  color: var(--red);
-  width: 130px;
-  display: flex;
-  justify-content: center;
+    color: var(--red);
+    width: 130px;
+    display: flex;
+    justify-content: center;
 }
 
 .next-meeting-name {
-  font-weight: bold;
-  padding-left: 5px;
-  max-width: 190px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+    font-weight: bold;
+    padding-left: 5px;
+    max-width: 190px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .sign-out-button {
-  margin-left: 5px;
-  background-color: red;
+    margin-left: 5px;
+    background-color: red;
 }
