@@ -25,11 +25,15 @@ export function Toolbar({
   setIsWindowExpanded,
   isSettingsMenuOpen,
   setIsSettingsMenuOpen,
+  adjustWindowPosition,
 }) {
   function handleExpandToggle() {
     if (isWindowExpanded) {
       setIsWindowExpanded(!isWindowExpanded);
-      setTimeout(() => window.resizeTo(WINDOW_HEIGHT, WINDOW_WIDTH), 250);
+      setTimeout(() => {
+        window.resizeTo(WINDOW_HEIGHT, WINDOW_WIDTH);
+        adjustWindowPosition();
+      }, 250);
     } else {
       setTimeout(() => setIsWindowExpanded(!isWindowExpanded), 0);
       window.resizeTo(

@@ -14,7 +14,10 @@ import "./App.css";
 import { AuthSteps } from "./components/auth-steps/auth-steps.js";
 
 const { shell } = window.require("electron");
+const { platform } = window.require("os");
+
 const DEFAULT_THEME = "default";
+const OS = platform();
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +39,7 @@ function App() {
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") || DEFAULT_THEME
   );
+  const [initialCoordinates, setInitialCoordinates] = useState({ x: 0, y: 0 });
 
   const scheduleListRef = useRef();
 
@@ -148,8 +152,15 @@ function App() {
     setTheme(color);
   }
 
+  function adjustWindowPosition() {
+    if (OS === "win32") {
+      window.moveTo(initialCoordinates.x, initialCoordinates.y);
+    }
+  }
+
   useEffect(() => {
     handleLogin();
+    setInitialCoordinates({ x: window.screenX, y: window.screenY });
   }, []);
 
   useEffect(
@@ -258,6 +269,7 @@ function App() {
             setIsWindowExpanded={setIsWindowExpanded}
             isSettingsMenuOpen={isSettingsMenuOpen}
             setIsSettingsMenuOpen={setIsSettingsMenuOpen}
+            adjustWindowPosition={adjustWindowPosition}
           />
         )}
       </div>
@@ -271,6 +283,7 @@ function App() {
         setIsWindowExpanded={setIsWindowExpanded}
         scheduleListRef={scheduleListRef}
         isWindowExpanded={isWindowExpanded}
+        adjustWindowPosition={adjustWindowPosition}
       />
     </div>
   );
