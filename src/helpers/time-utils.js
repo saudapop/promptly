@@ -41,8 +41,8 @@ const HOURS_PER_DAY = 24;
 
 const MS_PER_DAY = ONE_HOUR * HOURS_PER_DAY;
 
-export function getNextMeetingInfo(meetingOne, meetingTwo) {
-  const remainingTimeInMilliseconds = new Date(meetingOne.start) - new Date();
+export function getNextMeetingInfo(event, meetingTwo) {
+  const remainingTimeInMilliseconds = new Date(event.start) - new Date();
   const days = Math.floor(
     remainingTimeInMilliseconds / (ONE_HOUR * HOURS_PER_DAY)
   );
@@ -61,22 +61,22 @@ export function getNextMeetingInfo(meetingOne, meetingTwo) {
     days === 0 &&
     hours === 0 &&
     minutes < 2 &&
-    meetingOne.autoJoin &&
-    !meetingOne.hasAlreadyJoinedMeeting &&
-    meetingOne.url;
+    event.autoJoin &&
+    !event.hasAlreadyJoinedMeeting &&
+    event.url;
 
-  if (meetingHasPassed && meetingTwo) {
-    return getNextMeetingInfo(meetingTwo);
-  }
+  // if (meetingHasPassed && meetingTwo) {
+  //   return getNextMeetingInfo(meetingTwo);
+  // }
   return {
-    event: meetingOne,
+    event,
     remainingTime: `${show(days, "d")} ${show(
       hours,
       "h"
     )} ${minutes}m ${seconds}s`,
-    title: meetingOne.summary,
+    title: event.summary,
     meetingHasPassed,
     shouldAutoJoin,
-    url: meetingOne.url,
+    url: event.url,
   };
 }

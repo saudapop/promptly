@@ -18,18 +18,16 @@ export function SettingsMenu({
   shouldShowEventsWithVideoLinks,
   setShouldShowEventsWithVideoLinks,
   scheduleListRef,
-  setIsWindowExpanded,
   isWindowExpanded,
   adjustWindowPosition,
+  appRef,
 }) {
   const [isConfirmSignOutVisible, setIsConfirmSignOutVisible] = useState(false);
 
   function currentEventsListHeight() {
-    return (
-      Array.from(scheduleListRef.current.children).reduce(
-        (totalHeight, child) => totalHeight + Number(child.scrollHeight),
-        0
-      ) + 50
+    return Array.from(scheduleListRef.current.children).reduce(
+      (totalHeight, child) => totalHeight + Number(child.scrollHeight),
+      50
     );
   }
 
@@ -41,11 +39,23 @@ export function SettingsMenu({
     setShouldShowEventsWithVideoLinks(!shouldShowEventsWithVideoLinks);
 
     if (isWindowExpanded) {
-      setTimeout(() => setIsWindowExpanded(true));
-      setTimeout(() => {
-        window.resizeTo(400, currentEventsListHeight());
-        adjustWindowPosition();
-      }, 50);
+      if (shouldShowEventsWithVideoLinks) {
+        setTimeout(() => {
+          appRef.current.style.height = currentEventsListHeight() + "px";
+        });
+        setTimeout(() => {
+          window.resizeTo(400, currentEventsListHeight());
+          adjustWindowPosition();
+        }, 250);
+      } else {
+        setTimeout(() => {
+          window.resizeTo(400, currentEventsListHeight());
+          adjustWindowPosition();
+        });
+        setTimeout(() => {
+          appRef.current.style.height = currentEventsListHeight() + "px";
+        });
+      }
     }
   }
 

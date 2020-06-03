@@ -26,6 +26,7 @@ export function Toolbar({
   isSettingsMenuOpen,
   setIsSettingsMenuOpen,
   adjustWindowPosition,
+  appRef,
 }) {
   function handleExpandToggle() {
     if (isWindowExpanded) {
@@ -34,6 +35,7 @@ export function Toolbar({
         window.resizeTo(WINDOW_HEIGHT, WINDOW_WIDTH);
         adjustWindowPosition();
       }, 250);
+      appRef.current.style.height = null;
     } else {
       setTimeout(() => setIsWindowExpanded(!isWindowExpanded), 0);
       window.resizeTo(

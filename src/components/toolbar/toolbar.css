@@ -35,7 +35,7 @@
   filter: brightness(2);
 }
 .option-icon:active {
-  width: 15px;
+  width: 11px;
   filter: brightness(0.75);
 }
 .option-icon.hidden {
@@ -50,12 +50,14 @@
   width: 7px;
   transform: rotate(45deg);
   padding: 0px 5px;
+  transition: var(--link-transition);
 }
 
 .shrink-icon {
   height: auto;
   width: 12px;
   padding: 0px 5px;
+  transition: var(--link-transition);
 }
 
 /* RIGHT-SIDE ICONS */

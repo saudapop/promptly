@@ -41,6 +41,7 @@ function App() {
   );
   const [initialCoordinates, setInitialCoordinates] = useState({ x: 0, y: 0 });
 
+  const appRef = useRef();
   const scheduleListRef = useRef();
 
   const filteredSchedule = useMemo(
@@ -58,9 +59,9 @@ function App() {
   async function handleFetchSchedule(client) {
     let newSchedule = await fetchSchedule(client);
     if (newSchedule) {
-      newSchedule = newSchedule.map((event) => {
+      newSchedule = newSchedule.map((event, id) => {
         const isEventAutoJoin = localStorage.getItem(event.summary);
-        return { ...event, autoJoin: JSON.parse(isEventAutoJoin) };
+        return { ...event, autoJoin: JSON.parse(isEventAutoJoin), id };
       });
     } else {
       newSchedule = [];
@@ -88,7 +89,6 @@ function App() {
       setIsLoading(false);
     } catch (e) {
       console.log(e);
-      console.log("failed");
       setIsLoading(false);
       setError(
         get(e, "error") ||
@@ -140,7 +140,7 @@ function App() {
     shell.openExternal(event.url);
     let updatedSchedule = cloneDeep(schedule);
     updatedSchedule = updatedSchedule.map((thisEvent, i) =>
-      thisEvent.summary === event.summary && (i === 0 || i === 1)
+      thisEvent.id === event.id
         ? { ...event, hasAlreadyJoinedMeeting: true }
         : thisEvent
     );
@@ -173,6 +173,7 @@ function App() {
           const [meetingOne, meetingTwo] = schedule;
           const { shouldAutoJoin } = getNextMeetingInfo(meetingOne, meetingTwo);
           if (!shouldAutoJoin) {
+            console.log("auto fetch schedule at ", new Date().toLocaleString());
             refetchSchedule();
           }
         }, ONE_MINUTE * 30);
@@ -186,13 +187,22 @@ function App() {
     function handleNextMeetingCalculations() {
       if (filteredSchedule && filteredSchedule.length) {
         const timer = setInterval(() => {
-          const [meetingOne, meetingTwo] = filteredSchedule;
+          const sched = cloneDeep(filteredSchedule);
+
+          let hasMeetingHasPassed = true;
+          let nextMeeting;
+
+          while (hasMeetingHasPassed && sched.length) {
+            nextMeeting = getNextMeetingInfo(sched.shift());
+            hasMeetingHasPassed = nextMeeting.meetingHasPassed;
+          }
+
           const {
             event,
             remainingTime,
             meetingHasPassed,
             shouldAutoJoin,
-          } = getNextMeetingInfo(meetingOne, meetingTwo);
+          } = nextMeeting;
 
           if (shouldAutoJoin) {
             autoJoinMeeting(event);
@@ -208,7 +218,10 @@ function App() {
   );
 
   return (
-    <div className={`App ${isWindowExpanded ? "expanded" : ""}`}>
+    <div
+      ref={appRef}
+      className={`App ${isWindowExpanded ? "expanded" : "non-expanded"}`}
+    >
       <LoadingSpinner className={`${theme} ${isLoading ? "" : "hidden"}`} />
       {error && (
         <div className="error">
@@ -273,6 +286,7 @@ function App() {
             isSettingsMenuOpen={isSettingsMenuOpen}
             setIsSettingsMenuOpen={setIsSettingsMenuOpen}
             adjustWindowPosition={adjustWindowPosition}
+            appRef={appRef}
           />
         )}
       </div>
@@ -283,10 +297,10 @@ function App() {
         theme={theme}
         shouldShowEventsWithVideoLinks={shouldShowEventsWithVideoLinks}
         setShouldShowEventsWithVideoLinks={setShouldShowEventsWithVideoLinks}
-        setIsWindowExpanded={setIsWindowExpanded}
         scheduleListRef={scheduleListRef}
         isWindowExpanded={isWindowExpanded}
         adjustWindowPosition={adjustWindowPosition}
+        appRef={appRef}
       />
     </div>
   );
