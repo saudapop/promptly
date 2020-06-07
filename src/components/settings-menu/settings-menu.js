@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ToggleSlider } from "../toggle-slider/toggle-slider.js";
-
+import { HEIGHT_OFFSET } from "../toolbar/toolbar.js";
 import { TOKEN_PATH } from "../../auth.js";
 
 import "./settings-menu.css";
@@ -21,6 +21,9 @@ export function SettingsMenu({
   isWindowExpanded,
   adjustWindowPosition,
   appRef,
+  shouldShowNextEventInTitleBar,
+  setShowNextEventInTitleBar,
+  isDarwin,
 }) {
   const [isConfirmSignOutVisible, setIsConfirmSignOutVisible] = useState(false);
 
@@ -31,7 +34,7 @@ export function SettingsMenu({
     );
   }
 
-  function handleToggle() {
+  function handleToggleShowVideoLinks() {
     localStorage.setItem(
       "shouldShowEventsWithoutVideoLinks",
       !shouldShowEventsWithVideoLinks
@@ -44,12 +47,12 @@ export function SettingsMenu({
           appRef.current.style.height = currentEventsListHeight() + "px";
         });
         setTimeout(() => {
-          window.resizeTo(400, currentEventsListHeight());
+          window.resizeTo(400, currentEventsListHeight() + HEIGHT_OFFSET);
           adjustWindowPosition();
         }, 250);
       } else {
         setTimeout(() => {
-          window.resizeTo(400, currentEventsListHeight());
+          window.resizeTo(400, currentEventsListHeight() + HEIGHT_OFFSET);
           adjustWindowPosition();
         });
         setTimeout(() => {
@@ -59,6 +62,14 @@ export function SettingsMenu({
     }
   }
 
+  function handleToggleShowNextEventInTitleBar() {
+    localStorage.setItem(
+      "shouldShowNextEventInTitleBar",
+      !shouldShowNextEventInTitleBar
+    );
+    setShowNextEventInTitleBar(!shouldShowNextEventInTitleBar);
+  }
+
   function confirmSignOut() {
     fs.unlinkSync(TOKEN_PATH);
     // eslint-disable-next-line no-restricted-globals
@@ -66,7 +77,7 @@ export function SettingsMenu({
   }
 
   return (
-    <div className={`settings-menu ${isSettingsMenuOpen ? "" : "hidden"}`}>
+    <div className={`settings-menu  ${isSettingsMenuOpen ? "" : "hidden"}`}>
       {isSettingsMenuOpen && (
         <div className="settings-container">
           {isConfirmSignOutVisible ? (
@@ -93,31 +104,42 @@ export function SettingsMenu({
             </>
           ) : (
             <>
-              <div className="theme-list-container">
-                <div className="version-label">
-                  {"version: " + remote.app.getVersion()}
-                </div>
-                <div className="settings-label header">Theme:</div>
-                <div className="theme-container ">
-                  {COLORS.map((shade) => (
-                    <div
-                      key={shade}
-                      className={`theme-circle ${shade}
+              <div className={`settings-page-container ${theme}`}>
+                <div className="theme-list-container">
+                  <div className="settings-label">Theme:</div>
+                  <div className="theme-container ">
+                    {COLORS.map((shade) => (
+                      <div
+                        key={shade}
+                        className={`theme-circle ${shade}
                         ${theme === shade ? "active" : ""}`}
-                      onClick={() => handleThemeChange(shade)}
+                        onClick={() => handleThemeChange(shade)}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="setting-container">
+                  <div className="settings-label">
+                    Show events w/o video links:
+                  </div>
+                  <ToggleSlider
+                    containerClassName={`setting-toggle ${theme}`}
+                    checked={shouldShowEventsWithVideoLinks}
+                    onChange={handleToggleShowVideoLinks}
+                  />
+                </div>
+                {isDarwin && (
+                  <div className="setting-container">
+                    <div className="settings-label">
+                      Show next event in title bar:
+                    </div>
+                    <ToggleSlider
+                      containerClassName={`setting-toggle ${theme}`}
+                      checked={shouldShowNextEventInTitleBar}
+                      onChange={handleToggleShowNextEventInTitleBar}
                     />
-                  ))}
-                </div>
-              </div>
-              <div className="setting-container">
-                <div className="settings-label">
-                  Show events w/o video links:
-                </div>
-                <ToggleSlider
-                  containerClassName={`toggle-video-links ${theme}`}
-                  checked={shouldShowEventsWithVideoLinks}
-                  onChange={handleToggle}
-                />
+                  </div>
+                )}
               </div>
               <div className="settings-action-buttons-container">
                 <div
@@ -137,6 +159,9 @@ export function SettingsMenu({
           )}
         </div>
       )}
+      <div className="version-label">
+        {"version: " + remote.app.getVersion()}
+      </div>
     </div>
   );
 }

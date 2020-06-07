@@ -10,9 +10,11 @@ import "./toolbar.css";
 
 const { remote } = window.require("electron");
 
-const WINDOW_HEIGHT = 400;
-const WINDOW_WIDTH = 100;
-const GUTTER_HEIGHT = 50;
+export const HEIGHT_OFFSET = 12;
+
+const WINDOW_WIDTH = 400;
+const WINDOW_HEIGHT = 100 + HEIGHT_OFFSET;
+export const GUTTER_HEIGHT = 50 + HEIGHT_OFFSET;
 
 const FONT_AWESOME_LICENSE = "https://fontawesome.com/license";
 
@@ -32,14 +34,14 @@ export function Toolbar({
     if (isWindowExpanded) {
       setIsWindowExpanded(!isWindowExpanded);
       setTimeout(() => {
-        window.resizeTo(WINDOW_HEIGHT, WINDOW_WIDTH);
+        window.resizeTo(WINDOW_WIDTH, WINDOW_HEIGHT);
         adjustWindowPosition();
       }, 250);
       appRef.current.style.height = null;
     } else {
       setTimeout(() => setIsWindowExpanded(!isWindowExpanded), 0);
       window.resizeTo(
-        400,
+        WINDOW_WIDTH,
         scheduleListRef.current.scrollHeight + GUTTER_HEIGHT
       );
     }

@@ -13,11 +13,19 @@ import { getNextMeetingInfo, ONE_MINUTE } from "./helpers/time-utils";
 import "./App.css";
 import { AuthSteps } from "./components/auth-steps/auth-steps.js";
 
-const { shell } = window.require("electron");
+const { shell, ipcRenderer } = window.require("electron");
 const { platform } = window.require("os");
 
 const DEFAULT_THEME = "default";
-const OS = platform();
+let OS = platform();
+
+const WIN32 = "win32";
+const DARWIN = "darwin";
+
+// OS = WIN32;
+
+const isWin32 = OS === WIN32;
+const isDarwin = OS === DARWIN;
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +42,9 @@ function App() {
     setShouldShowEventsWithVideoLinks,
   ] = useState(
     JSON.parse(localStorage.getItem("shouldShowEventsWithoutVideoLinks"))
+  );
+  const [shouldShowNextEventInTitleBar, setShowNextEventInTitleBar] = useState(
+    JSON.parse(localStorage.getItem("shouldShowNextEventInTitleBar"))
   );
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [theme, setTheme] = useState(
@@ -153,7 +164,7 @@ function App() {
   }
 
   function adjustWindowPosition() {
-    if (OS === "win32") {
+    if (isWin32) {
       window.moveTo(initialCoordinates.x, initialCoordinates.y);
     }
   }
@@ -183,6 +194,8 @@ function App() {
     [schedule, oAuth2Client]
   );
 
+  const [titleBarText, setTitleBarText] = useState(null);
+
   useEffect(
     function handleNextMeetingCalculations() {
       if (filteredSchedule && filteredSchedule.length) {
@@ -202,11 +215,21 @@ function App() {
             remainingTime,
             meetingHasPassed,
             shouldAutoJoin,
+            textForTitleBar: newTitleBarText,
           } = nextMeeting;
 
           if (shouldAutoJoin) {
             autoJoinMeeting(event);
           }
+
+          if (isDarwin) {
+            const truncatedTitle =
+              event.summary.length > 10
+                ? event.summary.slice(0, 7) + "…"
+                : event.summary;
+            setTitleBarText(`${truncatedTitle}${newTitleBarText}`);
+          }
+
           setNextMeeting(
             !meetingHasPassed && { title: event.summary, remainingTime }
           );
@@ -214,14 +237,31 @@ function App() {
         return () => clearInterval(timer);
       }
     },
-    [filteredSchedule]
+    [filteredSchedule, shouldShowNextEventInTitleBar]
+  );
+
+  useEffect(
+    function updateTitleBarText() {
+      if (shouldShowNextEventInTitleBar && titleBarText) {
+        ipcRenderer.send("update-title-bar", titleBarText);
+      } else {
+        ipcRenderer.send("update-title-bar", "");
+      }
+    },
+    [titleBarText, shouldShowNextEventInTitleBar]
   );
 
   return (
     <div
       ref={appRef}
-      className={`App ${isWindowExpanded ? "expanded" : "non-expanded"}`}
+      className={`
+        App 
+        ${isWindowExpanded ? "expanded" : "non-expanded"} 
+        ${isWin32 ? WIN32 : ""}
+      `}
     >
+      {!isWin32 && <div id="arrow"></div>}
+
       <LoadingSpinner className={`${theme} ${isLoading ? "" : "hidden"}`} />
       {error && (
         <div className="error">
@@ -277,6 +317,7 @@ function App() {
         </div>
         {schedule && (
           <Toolbar
+            appRef={appRef}
             scheduleListRef={scheduleListRef}
             refetchSchedule={refetchSchedule}
             isWindowPinned={isWindowPinned}
@@ -286,22 +327,25 @@ function App() {
             isSettingsMenuOpen={isSettingsMenuOpen}
             setIsSettingsMenuOpen={setIsSettingsMenuOpen}
             adjustWindowPosition={adjustWindowPosition}
-            appRef={appRef}
           />
         )}
       </div>
       <SettingsMenu
+        theme={theme}
+        appRef={appRef}
+        scheduleListRef={scheduleListRef}
         isSettingsMenuOpen={isSettingsMenuOpen}
+        isWindowExpanded={isWindowExpanded}
+        isDarwin={isDarwin}
         setIsSettingsMenuOpen={setIsSettingsMenuOpen}
         handleThemeChange={handleThemeChange}
-        theme={theme}
+        adjustWindowPosition={adjustWindowPosition}
         shouldShowEventsWithVideoLinks={shouldShowEventsWithVideoLinks}
         setShouldShowEventsWithVideoLinks={setShouldShowEventsWithVideoLinks}
-        scheduleListRef={scheduleListRef}
-        isWindowExpanded={isWindowExpanded}
-        adjustWindowPosition={adjustWindowPosition}
-        appRef={appRef}
+        shouldShowNextEventInTitleBar={shouldShowNextEventInTitleBar}
+        setShowNextEventInTitleBar={setShowNextEventInTitleBar}
       />
+      {isWin32 && <div id="arrow" className={WIN32}></div>}
     </div>
   );
 }
