@@ -7,8 +7,30 @@
   flex: 1;
   justify-content: center;
   align-items: center;
-  border-color: var(--transparent);
+  background-color: rgba(0, 0, 0, 0.35);
   transition: 0.5s;
+}
+
+.settings-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.settings-page-container {
+  overflow-x: hidden;
+  max-height: 70%;
+  margin: 2.5px 0;
+  padding-right: 10px;
+  filter: hue-rotate(var(--filter-color));
+}
+
+/* reverts all colors to original color but allows
+   scrollbar to change to rotated color */
+.settings-page-container > * {
+  filter: hue-rotate(calc(0deg - var(--filter-color)));
 }
 
 .theme-container,
@@ -17,10 +39,18 @@
   align-items: flex-end;
 }
 
+.theme-container {
+  margin-bottom: 5px;
+}
+
+.setting-container {
+  justify-content: space-between;
+}
+
 .settings-label {
   font-size: 12px;
   color: var(--white);
-  padding: 5px 10px;
+  padding: 0 10px 5px;
   text-shadow: 2px 2px 1px black;
 }
 
@@ -62,7 +92,7 @@
   margin: 5px;
 }
 
-.toggle-video-links {
+.setting-toggle {
   filter: hue-rotate(var(--filter-color));
 }
 

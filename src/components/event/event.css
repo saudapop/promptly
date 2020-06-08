@@ -6,24 +6,6 @@
   margin-right: 5px;
 }
 
-.events-list::-webkit-scrollbar {
-  width: 6px;
-  padding-right: 10px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: transparent;
-  border-radius: 20px;
-  background-color: var(--less-transparent);
-}
-
-.events-list::-webkit-scrollbar-thumb {
-  background: var(--link);
-  border-width: 1px;
-  border-style: solid;
-  border-color: transparent;
-  border-radius: 20px;
-}
-
 .event-container {
   font-size: 12px;
   display: flex;

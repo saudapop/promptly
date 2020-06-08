@@ -65,18 +65,20 @@ export function getNextMeetingInfo(event, meetingTwo) {
     !event.hasAlreadyJoinedMeeting &&
     event.url;
 
-  // if (meetingHasPassed && meetingTwo) {
-  //   return getNextMeetingInfo(meetingTwo);
-  // }
+  const d = show(days, "d");
+  const h = show(hours, "h");
+  const m = show(minutes, "m");
+  const s = show(seconds, "s");
+
+  const textForTitleBar = d + h || m + s;
+
   return {
     event,
-    remainingTime: `${show(days, "d")} ${show(
-      hours,
-      "h"
-    )} ${minutes}m ${seconds}s`,
+    remainingTime: `${d} ${h} ${minutes}m ${seconds}s`,
     title: event.summary,
     meetingHasPassed,
     shouldAutoJoin,
     url: event.url,
+    textForTitleBar,
   };
 }
