@@ -337,6 +337,7 @@ function App() {
         isSettingsMenuOpen={isSettingsMenuOpen}
         isWindowExpanded={isWindowExpanded}
         isDarwin={isDarwin}
+        isWin32={isWin32}
         setIsSettingsMenuOpen={setIsSettingsMenuOpen}
         handleThemeChange={handleThemeChange}
         adjustWindowPosition={adjustWindowPosition}

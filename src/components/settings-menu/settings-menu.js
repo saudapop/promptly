@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ToggleSlider } from "../toggle-slider/toggle-slider.js";
 import { HEIGHT_OFFSET } from "../toolbar/toolbar.js";
 import { TOKEN_PATH } from "../../auth.js";
@@ -24,8 +24,13 @@ export function SettingsMenu({
   shouldShowNextEventInTitleBar,
   setShowNextEventInTitleBar,
   isDarwin,
+  isWin32,
 }) {
   const [isConfirmSignOutVisible, setIsConfirmSignOutVisible] = useState(false);
+  const [shouldLaunchOnSystemBoot, setShouldLaunchOnSystemBoot] = useState(
+    JSON.parse(localStorage.getItem("shouldLaunchOnSystemBoot")) ||
+      remote.app.getLoginItemSettings().openAtLogin
+  );
 
   function currentEventsListHeight() {
     return Array.from(scheduleListRef.current.children).reduce(
@@ -70,11 +75,27 @@ export function SettingsMenu({
     setShowNextEventInTitleBar(!shouldShowNextEventInTitleBar);
   }
 
+  function handleToggleShouldLaunchOnSystemBoot() {
+    const newSetting = !remote.app.getLoginItemSettings().openAtLogin;
+
+    localStorage.setItem("shouldLaunchOnSystemBoot", newSetting);
+    setShouldLaunchOnSystemBoot(newSetting);
+    remote.app.setLoginItemSettings({
+      openAtLogin: newSetting,
+    });
+  }
+
   function confirmSignOut() {
     fs.unlinkSync(TOKEN_PATH);
     // eslint-disable-next-line no-restricted-globals
     location.reload();
   }
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem("shouldLaunchOnSystemBoot")) === null) {
+      handleToggleShouldLaunchOnSystemBoot();
+    }
+  }, []);
 
   return (
     <div className={`settings-menu  ${isSettingsMenuOpen ? "" : "hidden"}`}>
@@ -137,6 +158,16 @@ export function SettingsMenu({
                       containerClassName={`setting-toggle ${theme}`}
                       checked={shouldShowNextEventInTitleBar}
                       onChange={handleToggleShowNextEventInTitleBar}
+                    />
+                  </div>
+                )}
+                {(isDarwin || isWin32) && (
+                  <div className="setting-container">
+                    <div className="settings-label">Launch on system boot:</div>
+                    <ToggleSlider
+                      containerClassName={`setting-toggle ${theme}`}
+                      checked={shouldLaunchOnSystemBoot}
+                      onChange={handleToggleShouldLaunchOnSystemBoot}
                     />
                   </div>
                 )}
