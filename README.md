@@ -25,6 +25,10 @@ Known caveats:
 - [Linux](#linux)
 - [Google Authentication](#google-authentication)
 
+When downloading you might see this. Just click the popup menu on the side and then click **Keep**.
+
+<img width="427" alt="Screen Shot 2020-06-08 at 1 36 59 AM" src="https://user-images.githubusercontent.com/45129081/83995910-b8a79d80-a928-11ea-8738-e33e2159b5df.png">
+
 ## MacOS
 
 Since Promptly is not notarized by Apple (yet), you should expect to see this screen or something similar when you try to open the app:
@@ -33,8 +37,6 @@ Since Promptly is not notarized by Apple (yet), you should expect to see this sc
 
 To get around this 
  1. Open up **System Preferences** <img width="25" src="https://user-images.githubusercontent.com/45129081/83544875-90edab00-a4cc-11ea-882d-fef6cd5a9006.png">
-
-
 
  2. Click on the **Security and Privacy** button <img width="25" src="https://user-images.githubusercontent.com/45129081/83544974-b2e72d80-a4cc-11ea-94ec-9a752f2ab234.png">
 
@@ -45,7 +47,12 @@ To get around this
 ***
 
 ## Windows
-TODO
+Since Promptly is not verified by Windows(yet),click **More Info** when you launch for the first time
+<img width="427" alt="Screen Shot 2020-06-08 at 12 30 45 AM" src="https://user-images.githubusercontent.com/45129081/83994916-d3c4de00-a925-11ea-8984-e99aeabf5528.png">
+)
+Then click **Run Anyway**
+<img width="427" alt="Screen Shot 2020-06-08 at 12 30 45 AM" src="https://user-images.githubusercontent.com/45129081/83995539-aa0cb680-a927-11ea-9ff5-b4801df9d617.png">
+
 
 ## Linux
 TODO
