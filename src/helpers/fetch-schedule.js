@@ -15,6 +15,15 @@ const END_OF_DAY = new CustomTime()
   .setMinutes(MINS)
   .toISOString();
 
+function getUrlIfAvailable(urls) {
+  while (urls && urls.length) {
+    const url = urls.shift();
+    if (url && isVideoLinkIncludedInUrl(url)) {
+      return url;
+    }
+  }
+}
+
 /**
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
@@ -50,16 +59,16 @@ export async function fetchSchedule(auth) {
 
         if (location) {
           const urls = location.match(URL_REGEX);
-          const url = urls && urls[0];
-          if (url && isVideoLinkIncludedInUrl(url)) {
+          const url = getUrlIfAvailable(urls);
+          if (url) {
             return { ...parsedEvent, url };
           }
         }
 
         if (description) {
           const urls = description.match(URL_REGEX);
-          const url = urls && urls[0];
-          if (url && isVideoLinkIncludedInUrl(url)) {
+          const url = getUrlIfAvailable(urls);
+          if (url) {
             return { ...parsedEvent, url };
           }
         }

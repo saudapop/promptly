@@ -28,15 +28,23 @@ const isWin32 = OS === WIN32;
 const isDarwin = OS === DARWIN;
 
 function App() {
+  // AUTH/LOGIN
   const [isLoading, setIsLoading] = useState(false);
   const [authUrl, setAuthUrl] = useState("");
   const [oAuth2Client, setOAuth2client] = useState();
   const [error, setError] = useState();
+
+  // SCHEDULE
   const [schedule, setSchedule] = useState();
   const [nextMeeting, setNextMeeting] = useState();
 
+  // WINDOW
   const [isWindowExpanded, setIsWindowExpanded] = useState(false);
   const [isWindowPinned, setIsWindowPinned] = useState(false);
+  const [initialCoordinates, setInitialCoordinates] = useState({ x: 0, y: 0 });
+
+  // SETTINGS
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [
     shouldShowEventsWithVideoLinks,
     setShouldShowEventsWithVideoLinks,
@@ -46,11 +54,9 @@ function App() {
   const [shouldShowNextEventInTitleBar, setShowNextEventInTitleBar] = useState(
     JSON.parse(localStorage.getItem("shouldShowNextEventInTitleBar"))
   );
-  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") || DEFAULT_THEME
   );
-  const [initialCoordinates, setInitialCoordinates] = useState({ x: 0, y: 0 });
 
   const appRef = useRef();
   const scheduleListRef = useRef();
@@ -169,7 +175,7 @@ function App() {
     }
   }
 
-  useEffect(() => {
+  useEffect(function componentDidMount() {
     handleLogin();
     setTimeout(
       () => setInitialCoordinates({ x: window.screenX, y: window.screenY }),
@@ -195,6 +201,7 @@ function App() {
   );
 
   const [titleBarText, setTitleBarText] = useState(null);
+  const [nextMeetingName, setNextMeetingName] = useState(null);
 
   useEffect(
     function handleNextMeetingCalculations() {
@@ -222,12 +229,11 @@ function App() {
             autoJoinMeeting(event);
           }
 
-          if (isDarwin) {
-            const truncatedTitle =
-              event.summary.length > 10
-                ? event.summary.slice(0, 7) + "…"
-                : event.summary;
-            setTitleBarText(`${truncatedTitle}${newTitleBarText}`);
+          if (isDarwin && titleBarText !== newTitleBarText) {
+            setTitleBarText(newTitleBarText);
+          }
+          if (nextMeetingName !== event.summary) {
+            setNextMeetingName(event.summary);
           }
 
           setNextMeeting(
@@ -242,13 +248,39 @@ function App() {
 
   useEffect(
     function updateTitleBarText() {
-      if (shouldShowNextEventInTitleBar && titleBarText) {
-        ipcRenderer.send("update-title-bar", titleBarText);
+      let start = 0;
+      let end = 7;
+      let timer;
+
+      if (shouldShowNextEventInTitleBar && titleBarText && nextMeetingName) {
+        timer = setInterval(() => {
+          let newTitleBarText = nextMeetingName.slice(start, end);
+
+          if (nextMeetingName.length > 7) {
+            if (newTitleBarText.length < 7) {
+              newTitleBarText +=
+                " " + nextMeetingName.slice(0, 6 - newTitleBarText.length);
+            }
+
+            if (start > nextMeetingName.length - 1) {
+              start = 0;
+              end = 7;
+            } else {
+              start += 2;
+              end += 2;
+            }
+          }
+          ipcRenderer.send(
+            "update-title-bar",
+            newTitleBarText + ":" + titleBarText
+          );
+        }, 500);
       } else {
         ipcRenderer.send("update-title-bar", "");
       }
+      return () => timer && clearInterval(timer);
     },
-    [titleBarText, shouldShowNextEventInTitleBar]
+    [shouldShowNextEventInTitleBar, titleBarText, nextMeetingName]
   );
 
   return (

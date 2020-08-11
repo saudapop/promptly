@@ -68,9 +68,8 @@ export function getNextMeetingInfo(event, meetingTwo) {
   const d = show(days, "d");
   const h = show(hours, "h");
   const m = show(minutes, "m");
-  const s = show(seconds, "s");
 
-  const textForTitleBar = d + h || m + s;
+  const textForTitleBar = d ? d + h : h + m;
 
   return {
     event,

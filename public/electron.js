@@ -1,7 +1,11 @@
+const os = require("os");
 const path = require("path");
 const isDev = require("electron-is-dev");
-const { ipcMain } = require("electron");
+const { ipcMain, BrowserWindow } = require("electron");
 const { menubar } = require("menubar");
+
+const OS = os.platform();
+const DARWIN = "darwin";
 
 const mb = menubar({
   browserWindow: {
@@ -11,8 +15,12 @@ const mb = menubar({
     height: 100 + 12,
     webPreferences: { nodeIntegration: true },
     alwaysOnTop: isDev,
+    resizable: false,
   },
-  icon: path.join(__dirname, "dock_icons/logoTemplate.png"),
+  icon: path.join(
+    __dirname,
+    OS === DARWIN ? "dock_icons/logoTemplate.png" : "icon.png"
+  ),
   preloadWindow: true,
   index: isDev
     ? "http://localhost:3000"
@@ -29,6 +37,12 @@ ipcMain.on("update-title-bar", (_, title) => {
 
 mb.on("after-create-window", () => {
   if (isDev) {
+    mb.addDevToolsExtension(
+      path.join(
+        os.homedir(),
+        "/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.7.0_0"
+      )
+    );
     mb.window.openDevTools();
   }
 });
